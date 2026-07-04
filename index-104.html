@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>የሌሊት ሙዚቃ | Sleep Music</title>
+<meta name="theme-color" content="#0B1026">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23F0C987'/%3E%3Ccircle cx='68' cy='40' r='38' fill='%230B1026'/%3E%3C/svg%3E">
+<link rel="manifest" id="manifestLink">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#0B1026;
+    --bg-surface:#141B34;
+    --bg-surface-2:#1C2444;
+    --moon:#F0C987;
+    --moon-dim:#8a7550;
+    --lavender:#8B7FD1;
+    --text:#E8E6F0;
+    --muted:#6B7290;
+    --danger:#D97C7C;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;height:100%;}
+  body{
+    background:
+      radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,.35), transparent),
+      radial-gradient(1px 1px at 80% 10%, rgba(255,255,255,.25), transparent),
+      radial-gradient(1.5px 1.5px at 60% 70%, rgba(255,255,255,.3), transparent),
+      radial-gradient(1px 1px at 30% 85%, rgba(255,255,255,.25), transparent),
+      radial-gradient(1px 1px at 90% 60%, rgba(255,255,255,.2), transparent),
+      radial-gradient(1px 1px at 45% 40%, rgba(255,255,255,.2), transparent),
+      linear-gradient(180deg, var(--bg-deep) 0%, #0d1330 60%, #0f1638 100%);
+    color:var(--text);
+    font-family:'Noto Sans Ethiopic', sans-serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:24px 16px 40px;
+  }
+  .app{width:100%; max-width:440px;}
+
+  .header{text-align:center; margin-bottom:22px;}
+  .header h1{
+    font-family:'Noto Sans Ethiopic', sans-serif;
+    font-weight:700;
+    font-size:22px;
+    margin:0 0 4px;
+    letter-spacing:.2px;
+  }
+  .header p{margin:0; color:var(--muted); font-size:13px;}
+  .install-btn{
+    margin-top:14px;
+    background:linear-gradient(135deg, var(--moon), #e0b96f);
+    color:#2a2410; border:none; font-family:inherit; font-weight:700;
+    font-size:13px; padding:10px 18px; border-radius:24px; cursor:pointer;
+    box-shadow:0 4px 16px rgba(240,201,135,.25);
+  }
+  .install-btn:active{transform:scale(.97);}
+
+  /* Moon signature element */
+  .moon-wrap{
+    display:flex; flex-direction:column; align-items:center;
+    margin:8px 0 28px;
+  }
+  .moon-stage{
+    position:relative; width:168px; height:168px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .moon-glow{
+    position:absolute; inset:-20px; border-radius:50%;
+    background:radial-gradient(circle, rgba(240,201,135,.28), rgba(240,201,135,0) 70%);
+    filter:blur(2px);
+    animation:breathe 6s ease-in-out infinite;
+  }
+  @keyframes breathe{
+    0%,100%{transform:scale(1); opacity:.7;}
+    50%{transform:scale(1.08); opacity:1;}
+  }
+  .moon-disc{
+    position:relative; width:128px; height:128px; border-radius:50%;
+    background:var(--moon);
+    box-shadow: inset -6px -6px 14px rgba(0,0,0,.15), 0 0 30px rgba(240,201,135,.35);
+    overflow:hidden;
+  }
+  .moon-shadow{
+    position:absolute; top:-8%; height:116%; width:116%;
+    border-radius:50%;
+    background:var(--bg-deep);
+    left:50%;
+    transform:translateX(0%);
+    transition:transform .6s linear;
+  }
+  .moon-time{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    flex-direction:column; pointer-events:none;
+  }
+  .moon-time span{
+    font-family:'Quicksand', sans-serif; font-weight:700; font-size:26px; color:var(--bg-deep);
+    text-shadow:0 1px 0 rgba(255,255,255,.2);
+  }
+  .moon-time small{font-size:10px; color:#3a3320; font-weight:600; letter-spacing:.5px;}
+  .moon-status{margin-top:14px; font-size:13px; color:var(--muted); text-align:center; min-height:18px;}
+
+  .card{
+    background:linear-gradient(180deg, var(--bg-surface), var(--bg-surface-2));
+    border:1px solid rgba(255,255,255,.06);
+    border-radius:18px;
+    padding:18px;
+    margin-bottom:16px;
+  }
+  .card h2{
+    font-size:14px; margin:0 0 12px; color:var(--lavender); font-weight:600;
+    display:flex; align-items:center; gap:6px;
+  }
+
+  /* timer presets */
+  .presets{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px;}
+  .preset-btn{
+    flex:1 1 auto; min-width:60px;
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.08);
+    color:var(--text);
+    padding:10px 6px;
+    border-radius:12px;
+    font-size:13px;
+    font-family:inherit;
+    cursor:pointer;
+  }
+  .preset-btn.active{
+    background:var(--moon); color:#2a2410; border-color:var(--moon); font-weight:700;
+  }
+  .custom-row{display:flex; gap:8px; align-items:center; margin-bottom:12px;}
+  .custom-row input[type=number]{
+    width:70px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1);
+    color:var(--text); border-radius:10px; padding:8px 10px; font-size:14px; font-family:inherit;
+  }
+  .custom-row label{font-size:12px; color:var(--muted); flex:1;}
+  .fade-row{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; font-size:13px; color:var(--muted);}
+  .toggle{
+    width:42px; height:24px; border-radius:20px; background:rgba(255,255,255,.1);
+    position:relative; cursor:pointer; border:1px solid rgba(255,255,255,.15); flex-shrink:0;
+  }
+  .toggle.on{background:var(--lavender);}
+  .toggle .dot{
+    position:absolute; top:2px; left:2px; width:18px; height:18px; border-radius:50%;
+    background:#fff; transition:transform .2s;
+  }
+  .toggle.on .dot{transform:translateX(18px);}
+
+  .timer-actions{display:flex; gap:10px;}
+  .btn{
+    flex:1; padding:12px; border-radius:12px; border:none; font-family:inherit;
+    font-size:14px; font-weight:600; cursor:pointer;
+  }
+  .btn-start{background:var(--moon); color:#2a2410;}
+  .btn-stop{background:rgba(217,124,124,.15); color:var(--danger); border:1px solid rgba(217,124,124,.3);}
+  .btn:disabled{opacity:.4;}
+
+  /* player */
+  .now-playing{
+    display:flex; align-items:center; gap:12px; margin-bottom:14px;
+    padding:10px; background:rgba(255,255,255,.03); border-radius:12px;
+  }
+  .disc-mini{
+    width:44px; height:44px; border-radius:50%; background:radial-gradient(circle at 35% 35%, var(--moon), var(--moon-dim));
+    flex-shrink:0; animation:spin 8s linear infinite; animation-play-state:paused;
+  }
+  .disc-mini.playing{animation-play-state:running;}
+  .np-info{flex:1; min-width:0;}
+  .np-title{font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .np-sub{font-size:11px; color:var(--muted);}
+  @keyframes spin{from{transform:rotate(0)} to{transform:rotate(360deg)}}
+
+  .controls{display:flex; align-items:center; justify-content:center; gap:18px; margin-bottom:6px;}
+  .ctrl-btn{
+    background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); color:var(--text);
+    width:42px; height:42px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; font-size:16px;
+  }
+  .ctrl-btn.main{width:56px; height:56px; background:var(--moon); color:#2a2410; font-size:20px; border:none;}
+
+  .vol-row{display:flex; align-items:center; gap:10px; margin-top:12px;}
+  .vol-row span{font-size:14px; color:var(--muted);}
+  input[type=range]{-webkit-appearance:none; flex:1; height:4px; border-radius:4px; background:rgba(255,255,255,.15); outline:none;}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; width:16px; height:16px; border-radius:50%; background:var(--moon); cursor:pointer;}
+
+  /* playlist */
+  .add-row{display:flex; gap:10px; margin-bottom:12px;}
+  .add-btn{
+    flex:1; background:rgba(139,127,209,.15); border:1px dashed rgba(139,127,209,.4);
+    color:var(--lavender); padding:12px; border-radius:12px; font-family:inherit; font-size:13px;
+    font-weight:600; cursor:pointer; text-align:center;
+  }
+  input[type=file]{display:none;}
+  .track-list{max-height:260px; overflow-y:auto; display:flex; flex-direction:column; gap:8px;}
+  .track-item{
+    display:flex; align-items:center; gap:10px; padding:10px; border-radius:12px;
+    background:rgba(255,255,255,.03); cursor:pointer; border:1px solid transparent;
+  }
+  .track-item.active{border-color:rgba(240,201,135,.4); background:rgba(240,201,135,.07);}
+  .track-name{flex:1; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .track-del{
+    background:none; border:none; color:var(--muted); font-size:16px; cursor:pointer; padding:4px;
+  }
+  .empty-note{color:var(--muted); font-size:13px; text-align:center; padding:14px 4px;}
+
+  .footer-note{text-align:center; color:var(--muted); font-size:11px; margin-top:6px; line-height:1.6;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <h1>🌙 የሌሊት ሙዚቃ</h1>
+    <p>ሙዚቃ እየሰማህ ተኛ — ራሱ በራሱ ይጠፋል</p>
+    <button class="install-btn" id="installBtn" style="display:none;">📲 አፕ ጫን (Install App)</button>
+  </div>
+
+  <div class="moon-wrap">
+    <div class="moon-stage">
+      <div class="moon-glow" id="moonGlow"></div>
+      <div class="moon-disc">
+        <div class="moon-shadow" id="moonShadow"></div>
+      </div>
+      <div class="moon-time">
+        <span id="timeLeft">--:--</span>
+        <small id="timeUnit">ደቂቃ ቀርቷል</small>
+      </div>
+    </div>
+    <div class="moon-status" id="moonStatus">ሰዓት ገና አልተጀመረም</div>
+  </div>
+
+  <div class="card">
+    <h2>⏱ የመተኛት ሰዓት</h2>
+    <div class="presets" id="presetRow">
+      <button class="preset-btn" data-min="15">15 ደ.</button>
+      <button class="preset-btn" data-min="30">30 ደ.</button>
+      <button class="preset-btn" data-min="45">45 ደ.</button>
+      <button class="preset-btn" data-min="60">60 ደ.</button>
+      <button class="preset-btn" data-min="90">90 ደ.</button>
+    </div>
+    <div class="custom-row">
+      <label for="customMin">ወይም የራስህ ደቂቃ አስገባ</label>
+      <input type="number" id="customMin" min="1" max="600" placeholder="ደ.">
+    </div>
+    <div class="fade-row">
+      <span>ድምፅ እየቀነሰ እንዲጠፋ (Fade out)</span>
+      <div class="toggle on" id="fadeToggle"><div class="dot"></div></div>
+    </div>
+    <div class="timer-actions">
+      <button class="btn btn-start" id="startTimerBtn">ሰዓት ጀምር</button>
+      <button class="btn btn-stop" id="stopTimerBtn" disabled>ሰዓት አቁም</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🎧 አሁን እየተጫወተ ያለው</h2>
+    <div class="now-playing">
+      <div class="disc-mini" id="discMini"></div>
+      <div class="np-info">
+        <div class="np-title" id="npTitle">ምንም ሙዚቃ አልተመረጠም</div>
+        <div class="np-sub" id="npSub">ከታች ካለው ዝርዝር ምረጥ</div>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="ctrl-btn" id="prevBtn">⏮</div>
+      <div class="ctrl-btn main" id="playBtn">▶</div>
+      <div class="ctrl-btn" id="nextBtn">⏭</div>
+    </div>
+    <div class="vol-row">
+      <span>🔉</span>
+      <input type="range" id="volSlider" min="0" max="100" value="80">
+      <span>🔊</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🎵 የሙዚቃ ዝርዝር</h2>
+    <div class="add-row">
+      <button class="add-btn" id="addBtn">＋ ከስልክ ሙዚቃ ጨምር (MP3)</button>
+      <input type="file" id="fileInput" accept="audio/*" multiple>
+    </div>
+    <div class="track-list" id="trackList"></div>
+    <div class="empty-note" id="emptyNote">እስካሁን ምንም ሙዚቃ አልተጨመረም</div>
+  </div>
+
+  <div class="footer-note">
+    ሙዚቃው በስልክህ ላይ ተቀምጦ ይቆያል፣ ኢንተርኔት ሳያስፈልግ መልሶ ይሰማል።<br>
+    መልካም እንቅልፍ 🌙
+  </div>
+</div>
+
+<audio id="audio"></audio>
+
+<script>
+(function(){
+  // ---------- IndexedDB ----------
+  let db;
+  const dbReq = indexedDB.open('sleepMusicDB', 1);
+  dbReq.onupgradeneeded = e => {
+    const d = e.target.result;
+    if(!d.objectStoreNames.contains('tracks')){
+      d.createObjectStore('tracks', {keyPath:'id', autoIncrement:true});
+    }
+  };
+  dbReq.onsuccess = e => { db = e.target.result; loadTracks(); };
+  dbReq.onerror = () => { document.getElementById('emptyNote').textContent = 'ማከማቻ መክፈት አልተሳካም'; };
+
+  function saveTrack(name, blob){
+    return new Promise((resolve, reject)=>{
+      const tx = db.transaction('tracks','readwrite');
+      const store = tx.objectStore('tracks');
+      const req = store.add({name, blob});
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
+  function deleteTrack(id){
+    const tx = db.transaction('tracks','readwrite');
+    tx.objectStore('tracks').delete(id);
+    tx.oncomplete = () => loadTracks();
+  }
+  function loadTracks(){
+    const tx = db.transaction('tracks','readonly');
+    const store = tx.objectStore('tracks');
+    const req = store.getAll();
+    req.onsuccess = () => { tracks = req.result; renderTracks(); };
+  }
+
+  // ---------- State ----------
+  let tracks = [];
+  let currentIndex = -1;
+  let currentUrl = null;
+  const audio = document.getElementById('audio');
+
+  const trackListEl = document.getElementById('trackList');
+  const emptyNote = document.getElementById('emptyNote');
+  const npTitle = document.getElementById('npTitle');
+  const npSub = document.getElementById('npSub');
+  const discMini = document.getElementById('discMini');
+  const playBtn = document.getElementById('playBtn');
+
+  function renderTracks(){
+    trackListEl.innerHTML = '';
+    if(tracks.length === 0){
+      emptyNote.style.display = 'block';
+      return;
+    }
+    emptyNote.style.display = 'none';
+    tracks.forEach((t, idx) => {
+      const item = document.createElement('div');
+      item.className = 'track-item' + (idx === currentIndex ? ' active' : '');
+      item.innerHTML = `<span class="track-name">🎵 ${escapeHtml(t.name)}</span><button class="track-del">✕</button>`;
+      item.querySelector('.track-name').addEventListener('click', () => playIndex(idx));
+      item.querySelector('.track-del').addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        if(idx === currentIndex){ audio.pause(); currentIndex = -1; }
+        deleteTrack(t.id);
+      });
+      trackListEl.appendChild(item);
+    });
+  }
+  function escapeHtml(s){
+    const d = document.createElement('div'); d.textContent = s; return d.innerHTML;
+  }
+
+  function playIndex(idx){
+    if(idx < 0 || idx >= tracks.length) return;
+    currentIndex = idx;
+    if(currentUrl) URL.revokeObjectURL(currentUrl);
+    currentUrl = URL.createObjectURL(tracks[idx].blob);
+    audio.src = currentUrl;
+    audio.volume = document.getElementById('volSlider').value/100;
+    audio.play().catch(()=>{});
+    npTitle.textContent = tracks[idx].name;
+    npSub.textContent = `${idx+1} / ${tracks.length}`;
+    renderTracks();
+  }
+
+  document.getElementById('addBtn').addEventListener('click', () => document.getElementById('fileInput').click());
+  document.getElementById('fileInput').addEventListener('change', async (e) => {
+    const files = Array.from(e.target.files);
+    for(const f of files){
+      await saveTrack(f.name.replace(/\.[^/.]+$/, ''), f);
+    }
+    loadTracks();
+    e.target.value = '';
+  });
+
+  playBtn.addEventListener('click', () => {
+    if(currentIndex === -1){
+      if(tracks.length > 0) playIndex(0);
+      return;
+    }
+    if(audio.paused){ audio.play().catch(()=>{}); } else { audio.pause(); }
+  });
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    if(tracks.length === 0) return;
+    playIndex((currentIndex + 1) % tracks.length);
+  });
+  document.getElementById('prevBtn').addEventListener('click', () => {
+    if(tracks.length === 0) return;
+    playIndex((currentIndex - 1 + tracks.length) % tracks.length);
+  });
+  audio.addEventListener('play', () => { playBtn.textContent = '⏸'; discMini.classList.add('playing'); });
+  audio.addEventListener('pause', () => { playBtn.textContent = '▶'; discMini.classList.remove('playing'); });
+  audio.addEventListener('ended', () => {
+    if(tracks.length > 0) playIndex((currentIndex + 1) % tracks.length);
+  });
+  document.getElementById('volSlider').addEventListener('input', (e) => {
+    if(!fadeActive) audio.volume = e.target.value/100;
+  });
+
+  // ---------- Fade toggle ----------
+  let fadeEnabled = true;
+  const fadeToggle = document.getElementById('fadeToggle');
+  fadeToggle.addEventListener('click', () => {
+    fadeEnabled = !fadeEnabled;
+    fadeToggle.classList.toggle('on', fadeEnabled);
+  });
+
+  // ---------- Sleep timer ----------
+  const presetRow = document.getElementById('presetRow');
+  const customMin = document.getElementById('customMin');
+  const startBtn = document.getElementById('startTimerBtn');
+  const stopBtn = document.getElementById('stopTimerBtn');
+  const moonShadow = document.getElementById('moonShadow');
+  const timeLeftEl = document.getElementById('timeLeft');
+  const timeUnitEl = document.getElementById('timeUnit');
+  const moonStatus = document.getElementById('moonStatus');
+
+  let selectedMinutes = null;
+  let timerEndAt = null;
+  let timerTotalMs = 0;
+  let tickHandle = null;
+  let fadeActive = false;
+  let baseVolume = 0.8;
+
+  presetRow.addEventListener('click', (e) => {
+    const btn = e.target.closest('.preset-btn');
+    if(!btn) return;
+    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedMinutes = parseInt(btn.dataset.min, 10);
+    customMin.value = '';
+  });
+  customMin.addEventListener('input', () => {
+    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+    selectedMinutes = parseInt(customMin.value, 10) || null;
+  });
+
+  startBtn.addEventListener('click', () => {
+    if(!selectedMinutes || selectedMinutes <= 0){
+      moonStatus.textContent = 'እባክህ የደቂቃ ብዛት ምረጥ';
+      return;
+    }
+    localStorage.setItem('sleepMusicLastMinutes', selectedMinutes);
+    timerTotalMs = selectedMinutes * 60 * 1000;
+    timerEndAt = Date.now() + timerTotalMs;
+    fadeActive = false;
+    baseVolume = document.getElementById('volSlider').value/100;
+    audio.volume = baseVolume;
+    startBtn.disabled = true;
+    stopBtn.disabled = false;
+    moonStatus.textContent = 'ሙዚቃ በራሱ ይቆማል...';
+    if(tickHandle) clearInterval(tickHandle);
+    tickHandle = setInterval(tick, 500);
+    tick();
+  });
+
+  stopBtn.addEventListener('click', () => cancelTimer('ሰዓቱ ተሰርዟል'));
+
+  function cancelTimer(msg){
+    clearInterval(tickHandle);
+    tickHandle = null;
+    timerEndAt = null;
+    fadeActive = false;
+    audio.volume = document.getElementById('volSlider').value/100;
+    startBtn.disabled = false;
+    stopBtn.disabled = true;
+    moonShadow.style.transform = 'translateX(0%)';
+    timeLeftEl.textContent = '--:--';
+    timeUnitEl.textContent = 'ደቂቃ ቀርቷል';
+    moonStatus.textContent = msg || 'ሰዓት ገና አልተጀመረም';
+  }
+
+  function tick(){
+    const remaining = timerEndAt - Date.now();
+    if(remaining <= 0){
+      audio.pause();
+      cancelTimer('ሙዚቃው ቆሟል — መልካም እንቅልፍ 🌙');
+      return;
+    }
+    const frac = 1 - (remaining / timerTotalMs); // 0 -> 1 as time passes
+    // moon shadow slides from 0% (full moon) to 100% (fully covered)
+    const offset = frac * 116; // percent, matches shadow width
+    moonShadow.style.transform = `translateX(${offset - 8}%)`;
+
+    const mins = Math.floor(remaining / 60000);
+    const secs = Math.floor((remaining % 60000) / 1000);
+    timeLeftEl.textContent = `${mins}:${secs.toString().padStart(2,'0')}`;
+    timeUnitEl.textContent = 'ቀርቷል';
+
+    // fade out during final 60s (or final 20% of duration, whichever is smaller)
+    const fadeWindow = Math.min(60000, timerTotalMs * 0.2);
+    if(fadeEnabled && remaining <= fadeWindow){
+      fadeActive = true;
+      const fadeFrac = Math.max(0, remaining / fadeWindow);
+      audio.volume = Math.max(0, baseVolume * fadeFrac);
+      moonStatus.textContent = 'ድምፁ እየቀነሰ ነው...';
+    }
+  }
+
+  // restore last used minutes as convenience
+  const last = parseInt(localStorage.getItem('sleepMusicLastMinutes'), 10);
+  if(last){
+    customMin.placeholder = last + ' ደ.';
+  }
+
+  // ---------- Minimal PWA (manifest + SW) ----------
+  // Generate real PNG icons (more reliable for Chrome install criteria than inline SVG)
+  function generateIconPNG(size){
+    const c = document.createElement('canvas');
+    c.width = size; c.height = size;
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = '#0B1026';
+    ctx.fillRect(0,0,size,size);
+    ctx.beginPath();
+    ctx.arc(size*0.5, size*0.5, size*0.42, 0, Math.PI*2);
+    ctx.fillStyle = '#F0C987';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(size*0.66, size*0.38, size*0.34, 0, Math.PI*2);
+    ctx.fillStyle = '#0B1026';
+    ctx.fill();
+    return c.toDataURL('image/png');
+  }
+
+  const manifest = {
+    name: "የሌሊት ሙዚቃ - Sleep Music",
+    short_name: "Sleep Music",
+    id: "/",
+    start_url: ".",
+    scope: ".",
+    display: "standalone",
+    background_color: "#0B1026",
+    theme_color: "#0B1026",
+    icons: [
+      { src: generateIconPNG(192), sizes: "192x192", type: "image/png", purpose: "any" },
+      { src: generateIconPNG(512), sizes: "512x512", type: "image/png", purpose: "any" },
+      { src: generateIconPNG(192), sizes: "192x192", type: "image/png", purpose: "maskable" },
+      { src: generateIconPNG(512), sizes: "512x512", type: "image/png", purpose: "maskable" }
+    ]
+  };
+  const manifestBlob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
+  document.getElementById('manifestLink').setAttribute('href', URL.createObjectURL(manifestBlob));
+
+  if('serviceWorker' in navigator){
+    const swCode = `
+      self.addEventListener('install', e => self.skipWaiting());
+      self.addEventListener('activate', e => self.clients.claim());
+      self.addEventListener('fetch', e => {});
+    `;
+    const swBlob = new Blob([swCode], {type:'application/javascript'});
+    navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(()=>{});
+  }
+
+  // ---------- Custom Install Button (no reliance on browser's own icon) ----------
+  const installBtn = document.getElementById('installBtn');
+  let deferredPrompt = null;
+
+  function isStandalone(){
+    return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  }
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+
+  if(!isStandalone()){
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.style.display = 'inline-block';
+      installBtn.textContent = '📲 አፕ ጫን (Install App)';
+    });
+
+    // iOS Safari has no beforeinstallprompt — show manual instructions instead
+    if(isIOS){
+      installBtn.style.display = 'inline-block';
+      installBtn.textContent = '📲 አፕ እንዴት እንደሚጫን';
+    }
+  }
+
+  installBtn.addEventListener('click', async () => {
+    if(deferredPrompt){
+      installBtn.disabled = true;
+      deferredPrompt.prompt();
+      const choice = await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      installBtn.disabled = false;
+      if(choice.outcome === 'accepted'){
+        installBtn.style.display = 'none';
+      }
+    } else if(isIOS){
+      alert('ይህን አፕ ወደ ስልክህ ለመጫን፦\n1. ከታች ያለውን የ Share (⬆️) ቁልፍ ተጫን\n2. "Add to Home Screen" የሚለውን ምረጥ\n3. "Add" ተጫን');
+    } else {
+      alert('አፕ ጫን ማድረግ ይህ ብራውዘር ላይ አይታይም። Chrome ወይም Edge ተጠቀም።');
+    }
+  });
+
+  window.addEventListener('appinstalled', () => {
+    installBtn.style.display = 'none';
+  });
+})();
+</script>
+</body>
+</html>
